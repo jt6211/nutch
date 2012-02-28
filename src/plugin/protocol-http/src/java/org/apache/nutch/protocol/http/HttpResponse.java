@@ -89,6 +89,7 @@ public class HttpResponse implements Response {
       int sockPort = http.useProxy() ? http.getProxyPort() : port;
       InetSocketAddress sockAddr= new InetSocketAddress(sockHost, sockPort);
       socket.connect(sockAddr, http.getTimeout());
+      headers.set("_ip", socket.getInetAddress().getHostAddress());
 
       // make request
       OutputStream req = socket.getOutputStream();
