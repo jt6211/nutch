@@ -40,8 +40,9 @@ public class StorageUtils {
       Class<K> keyClass, Class<V> persistentClass) throws ClassNotFoundException, GoraException {
     Class<? extends DataStore<K, V>> dataStoreClass =
       (Class<? extends DataStore<K, V>>) getDataStoreClass(conf);
+    
     return DataStoreFactory.createDataStore(dataStoreClass,
-            keyClass, persistentClass);
+            keyClass, persistentClass, conf);
   }
 
   @SuppressWarnings("unchecked")
@@ -56,8 +57,9 @@ public class StorageUtils {
 
     Class<? extends DataStore<K, V>> dataStoreClass =
       (Class<? extends DataStore<K, V>>) getDataStoreClass(conf);
+    
     return DataStoreFactory.createDataStore(dataStoreClass,
-            keyClass, persistentClass, schema);
+            keyClass, persistentClass, conf, schema);
   }
 
   @SuppressWarnings("unchecked")
