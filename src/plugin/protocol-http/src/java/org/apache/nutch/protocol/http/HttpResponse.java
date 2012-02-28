@@ -286,6 +286,8 @@ public class HttpResponse implements Response {
   private void parseHeaders(PushbackInputStream in, StringBuffer line)
     throws IOException, HttpException {
 
+    StringBuilder rawHeaders = new StringBuilder();
+
     while (readLine(in, line, true) != 0) {
 
       // handle HTTP responses with missing blank line after headers
@@ -304,14 +306,18 @@ public class HttpResponse implements Response {
             //for the returned header names to the standard metadata
             //names in the ParseData class
           processHeaderLine(line);
+          rawHeaders.append(line).append("\n");
         } catch (Exception e) {
           // fixme:
           Http.LOG.error("Failed with the following exception: ", e);
         }
+        headers.set("raw_headers", rawHeaders.toString());
         return;
       }
 
       processHeaderLine(line);
+      rawHeaders.append(line).append("\n");
+      headers.set("raw_headers", rawHeaders.toString());
     }
   }
 

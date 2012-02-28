@@ -94,11 +94,14 @@ public class HttpResponse implements Response {
       code = Http.getClient().executeMethod(get);
 
       Header[] heads = get.getResponseHeaders();
+      StringBuilder rawHeaders = new StringBuilder();
 
       for (int i = 0; i < heads.length; i++) {
         headers.set(heads[i].getName(), heads[i].getValue());
+        rawHeaders.append(heads[i].getName()).append(": ").append(heads[i].getValue()).append("\n");
       }
-      
+      headers.set("raw_headers", rawHeaders.toString());
+
       // Limit download size
       int contentLength = Integer.MAX_VALUE;
       String contentLengthString = headers.get(Response.CONTENT_LENGTH);
