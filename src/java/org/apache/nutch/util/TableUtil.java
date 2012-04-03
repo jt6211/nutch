@@ -119,11 +119,13 @@ public class TableUtil {
   }
 
   private static void reverseAppendSplits(String[] splits, StringBuilder buf) {
-    for (int i = splits.length - 1; i > 0; i--) {
-      buf.append(splits[i]);
-      buf.append('.');
+    if (splits.length > 0) {
+      for (int i = splits.length - 1; i > 0; i--) {
+        buf.append(splits[i]);
+        buf.append('.');
+      }
+      buf.append(splits[0]);
     }
-    buf.append(splits[0]);
   }
 
   /**

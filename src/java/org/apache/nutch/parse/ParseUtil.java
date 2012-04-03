@@ -204,7 +204,7 @@ public class ParseUtil extends Configured {
         } catch (MalformedURLException e) {
           return redirectedPage;
         }
-        if (newUrl == null || newUrl.equals(url)) {
+        if (newUrl != null && !newUrl.equals(url)) {
           String reprUrl = URLUtil.chooseRepr(url, newUrl,
               refreshTime < FetcherJob.PERM_REFRESH_TIME);
           WebPage newWebPage = new WebPage();
