@@ -20,6 +20,8 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import java.net.MalformedURLException;
+
 import org.apache.avro.util.Utf8;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.nutch.crawl.GeneratorJob.SelectorEntry;
@@ -73,7 +75,11 @@ extends GoraReducer<SelectorEntry, WebPage, String, WebPage> {
       }
 
       Mark.GENERATE_MARK.putMark(page, batchId);
-      context.write(TableUtil.reverseUrl(key.url), page);
+      try {
+          context.write(TableUtil.reverseUrl(key.url), page);
+      } catch (MalformedURLException e) {
+          continue;
+      }
       context.getCounter("Generator", "GENERATE_MARK").increment(1);
       count++;
     }
