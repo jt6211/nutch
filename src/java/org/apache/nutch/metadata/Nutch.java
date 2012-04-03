@@ -110,6 +110,8 @@ public interface Nutch {
   public static final String ARG_CLASS = "class";
   /** Depth (number of cycles) of a crawl. */
   public static final String ARG_DEPTH = "depth";
+  /** Parse */
+  public static final String ARG_PARSE = "parse";
   
   // short constants for status / results fields
   /** Status / result message. */
