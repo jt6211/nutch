@@ -154,6 +154,7 @@ public class FetcherJob extends NutchTool implements Tool {
     Integer threads = (Integer)args.get(Nutch.ARG_THREADS);
     Boolean shouldResume = (Boolean)args.get(Nutch.ARG_RESUME);
     Integer numTasks = (Integer)args.get(Nutch.ARG_NUMTASKS);
+    Boolean parse = (Boolean)args.get(Nutch.ARG_PARSE);
  
     if (threads != null && threads > 0) {
       getConf().setInt(THREADS_KEY, threads);
@@ -164,6 +165,10 @@ public class FetcherJob extends NutchTool implements Tool {
     getConf().set(GeneratorJob.BATCH_ID, batchId);
     if (shouldResume != null) {
       getConf().setBoolean(RESUME_KEY, shouldResume);
+    }
+
+    if (parse != null) {
+      getConf().setBoolean(PARSE_KEY, parse);
     }
 
     // set the actual time for the timelimit relative
@@ -201,7 +206,7 @@ public class FetcherJob extends NutchTool implements Tool {
    * @return 0 on success
    * @throws Exception
    */
-  public int fetch(String batchId, int threads, boolean shouldResume, int numTasks)
+  public int fetch(String batchId, int threads, boolean shouldResume, int numTasks, boolean parse)
       throws Exception {
     LOG.info("FetcherJob: starting");
 
@@ -219,7 +224,8 @@ public class FetcherJob extends NutchTool implements Tool {
         Nutch.ARG_BATCH, batchId,
         Nutch.ARG_THREADS, threads,
         Nutch.ARG_RESUME, shouldResume,
-        Nutch.ARG_NUMTASKS, numTasks));
+        Nutch.ARG_NUMTASKS, numTasks,
+        Nutch.ARG_PARSE, parse));
     LOG.info("FetcherJob: done");
     return 0;
   }
@@ -261,6 +267,7 @@ public class FetcherJob extends NutchTool implements Tool {
   public int run(String[] args) throws Exception {
     int threads = -1;
     boolean shouldResume = false;
+    boolean parse = false;
     String batchId;
 
     String usage = "Usage: FetcherJob (<batchId> | -all) [-crawlId <id>] " +
@@ -292,10 +299,12 @@ public class FetcherJob extends NutchTool implements Tool {
         numTasks = Integer.parseInt(args[++i]);
       } else if ("-crawlId".equals(args[i])) {
         getConf().set(Nutch.CRAWL_ID_KEY, args[++i]);
+      } else if ("-parse".equals(args[i])) {
+        parse = true;
       }
     }
 
-    int fetchcode = fetch(batchId, threads, shouldResume, numTasks); // run the Fetcher
+    int fetchcode = fetch(batchId, threads, shouldResume, numTasks, parse); // run the Fetcher
 
     return fetchcode;
   }
